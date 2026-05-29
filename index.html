@@ -421,7 +421,8 @@ const MODEL  = 'claude-sonnet-4-5-20250929';
 function getKey() { return localStorage.getItem('lm_key') || ''; }
 
 function activateTool() {
-  const k = document.getElementById('setup-key-inp').value.trim();
+  const raw = document.getElementById('setup-key-inp').value;
+  const k = raw.trim().replace(/\s+/g, '');
   if (!k) {
     const se = document.getElementById('setup-err');
     se.textContent = '⚠ Insira sua API key antes de continuar.';
@@ -429,7 +430,9 @@ function activateTool() {
     return;
   }
   if (!k.startsWith('sk-ant-')) {
-    document.getElementById('setup-err').style.display = 'block';
+    const se = document.getElementById('setup-err');
+    se.textContent = '⚠ Chave invalida — deve comecar com sk-ant-';
+    se.style.display = 'block';
     return;
   }
   localStorage.setItem('lm_key', k);
@@ -679,6 +682,7 @@ async function runTrain() {
     document.getElementById('btn-train').disabled=false;
     const eb=document.getElementById('err-train'); eb.textContent='⚠ '+e.message; eb.style.display='block';
   }
+}
 }
 
 // ── EXPORT ─────────────────────────────────────
